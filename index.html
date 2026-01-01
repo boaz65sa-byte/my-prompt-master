@@ -2,107 +2,164 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>AI Prompt Master - מחולל בקשות</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PRO Prompt Generator | סביבת עבודה מקצועית</title>
     <style>
-        body { font-family: 'Segoe UI', system-ui; background: #0f172a; color: #f8fafc; padding: 20px; line-height: 1.6; }
-        .wrapper { max-width: 700px; margin: auto; background: #1e293b; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
-        h1 { text-align: center; color: #38bdf8; margin-bottom: 30px; }
+        :root {
+            --bg: #0f172a; --card: #1e293b; --accent: #38bdf8; --text: #f1f5f9; --success: #22c55e;
+        }
+        body { font-family: 'Assistant', sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 900px; margin: auto; }
+        .header { text-align: center; padding: 40px 0; border-bottom: 1px solid #334155; margin-bottom: 30px; }
+        .header h1 { color: var(--accent); font-size: 2.5rem; margin: 0; }
         
-        label { display: block; margin-top: 15px; font-weight: bold; color: #94a3b8; }
-        select, textarea, input { width: 100%; padding: 12px; margin-top: 5px; background: #334155; border: 1px solid #475569; color: white; border-radius: 8px; box-sizing: border-box; }
+        .main-grid { display: grid; grid-template-columns: 2fr 1fr; gap: 20px; }
+        .card { background: var(--card); padding: 25px; border-radius: 16px; box-shadow: 0 4px 20px rgba(0,0,0,0.3); }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        label { display: block; margin-top: 15px; font-weight: 600; color: #94a3b8; font-size: 0.9rem; }
+        select, textarea, input { 
+            width: 100%; padding: 12px; margin-top: 8px; background: #0f172a; border: 1px solid #475569; 
+            color: white; border-radius: 10px; font-size: 1rem; transition: 0.3s;
+        }
+        select:focus, textarea:focus { border-color: var(--accent); outline: none; box-shadow: 0 0 10px rgba(56, 189, 248, 0.2); }
         
-        .btn-generate { background: #38bdf8; color: #0f172a; font-weight: bold; margin-top: 25px; border: none; padding: 15px; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
-        .btn-generate:hover { background: #7dd3fc; transform: translateY(-2px); }
-
-        #result-container { margin-top: 30px; padding: 20px; background: #0f172a; border-radius: 10px; border: 1px solid #38bdf8; display: none; }
-        #final-prompt { white-space: pre-wrap; font-size: 0.95rem; color: #cbd5e1; }
-        .copy-btn { background: #22c55e; margin-top: 15px; border: none; padding: 10px; color: white; border-radius: 5px; cursor: pointer; width: 100%; }
+        .btn { 
+            background: var(--accent); color: var(--bg); font-weight: bold; border: none; 
+            padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; margin-top: 20px; font-size: 1.1rem;
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        
+        #resultArea { margin-top: 30px; background: #000; padding: 20px; border-radius: 12px; border: 1px solid var(--accent); position: relative; }
+        .copy-badge { position: absolute; top: 10px; left: 10px; background: var(--success); padding: 4px 8px; border-radius: 5px; font-size: 0.7rem; display: none; }
+        
+        .history-item { 
+            padding: 10px; border-bottom: 1px solid #334155; font-size: 0.85rem; cursor: pointer; color: #94a3b8; 
+        }
+        .history-item:hover { color: var(--accent); background: #334155; }
+        
+        @media (max-width: 768px) { .main-grid { grid-template-columns: 1fr; } }
     </style>
 </head>
 <body>
 
-<div class="wrapper">
-    <h1>🚀 AI Prompt Master</h1>
-    
-    <label>1. מה התפקיד של ה-AI?</label>
-    <select id="role">
-        <option value="מתכנת Full Stack בכיר">מתכנת בכיר</option>
-        <option value="מומחה חווית משתמש (UX/UI)">מעצב ממשקים</option>
-        <option value="מנתח מערכות מידע">מנתח מערכות</option>
-        <option value="כותב תוכן שיווקי">קופירייטר</option>
-    </select>
+<div class="container">
+    <div class="header">
+        <h1>PRO Prompt Master 2.0</h1>
+        <p>הופך רעיונות גולמיים לפרומפטים מקצועיים בשיטת הנדסת הקשר</p>
+    </div>
 
-    <div class="grid">
-        <div>
-            <label>2. מה בונים?</label>
-            <select id="outputType">
-                <option value="אפליקציית PWA">אפליקציית PWA</option>
-                <option value="דף נחיתה">דף נחיתה</option>
-                <option value="פונקציה ספציפית">פונקציה/קוד בלבד</option>
-                <option value="מסמך אפיון">מסמך אפיון</option>
+    <div class="main-grid">
+        <div class="card">
+            <label>🤖 תפקיד המומחה (Expert Role)</label>
+            <select id="role">
+                <option value="Senior Software Engineer & Architect">מתכנת בכיר וארכיטקט תוכנה</option>
+                <option value="Product Manager & UX Specialist">מנהל מוצר ומומחה חווית משתמש</option>
+                <option value="Professional Content Creator">יוצר תוכן וקופירייטר מומחה</option>
+                <option value="Data Scientist">מדען נתונים</option>
             </select>
+
+            <label>🎯 מה המטרה העיקרית?</label>
+            <textarea id="desc" rows="4" placeholder="תאר את הרעיון שלך כאן בפירוט..."></textarea>
+
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+                <div>
+                    <label>🛠 טכנולוגיה/כלים</label>
+                    <input type="text" id="stack" placeholder="למשל: HTML, JS, PWA">
+                </div>
+                <div>
+                    <label>🗣 טון כתיבה</label>
+                    <select id="tone">
+                        <option value="Professional & Concise">מקצועי ותמציתי</option>
+                        <option value="Educational & Explanatory">מדריכי ומסביר</option>
+                        <option value="Creative & Bold">יצירתי ונועז</option>
+                    </select>
+                </div>
+            </div>
+
+            <label>📋 פורמט פלט רצוי</label>
+            <select id="output">
+                <option value="Single file production-ready code">קוד מוכן לעבודה (קובץ אחד)</option>
+                <option value="Step-by-step implementation guide">מדריך יישום שלב אחר שלב</option>
+                <option value="Detailed architecture & Logic">מסמך ארכיטקטורה ולוגיקה</option>
+            </select>
+
+            <button class="btn" onclick="buildPrompt()">צור פרומפט מקצועי ✨</button>
         </div>
-        <div>
-            <label>3. רמת פירוט</label>
-            <select id="detailLevel">
-                <option value="שלב אחר שלב עם הסברים">מפורט (Step-by-Step)</option>
-                <option value="קוד נקי ללא הסברים מיותרים">קוד נקי בלבד</option>
-                <option value="כולל טיפול בשגיאות ומקרי קצה">מקצועי (כולל שגיאות)</option>
-            </select>
+
+        <div class="card">
+            <h3>📜 היסטוריה אחרונה</h3>
+            <div id="historyList"></div>
         </div>
     </div>
 
-    <label>4. תאר את הרעיון שלך (במילים פשוטות):</label>
-    <textarea id="description" rows="4" placeholder="למשל: אני רוצה אפליקציה שתעזור לי לנהל..."></textarea>
-
-    <label>5. כלים וטכנולוגיות שחשוב לכלול:</label>
-    <input type="text" id="tools" placeholder="למשל: HTML/JS, Firebase, PDF Lib, WhatsApp link">
-
-    <button class="btn-generate" onclick="buildPrompt()">צור בקשה מנצחת ✨</button>
-
-    <div id="result-container">
-        <label>הבקשה המוכנה שלך:</label>
-        <div id="final-prompt"></div>
-        <button class="copy-btn" onclick="copyToClipboard()">העתק ושלח ל-AI 📋</button>
+    <div id="resultArea" style="display: none;">
+        <span id="copyBadge" class="copy-badge">הועתק!</span>
+        <div id="finalPrompt" style="white-space: pre-wrap; line-height: 1.5;"></div>
+        <button class="btn" style="background: var(--success);" onclick="copyToClipboard()">העתק הכל ושגר ל-AI 🚀</button>
     </div>
 </div>
+
+
 
 <script>
     function buildPrompt() {
         const role = document.getElementById('role').value;
-        const type = document.getElementById('outputType').value;
-        const detail = document.getElementById('detailLevel').value;
-        const desc = document.getElementById('description').value;
-        const tools = document.getElementById('tools').value;
+        const desc = document.getElementById('desc').value;
+        const stack = document.getElementById('stack').value;
+        const tone = document.getElementById('tone').value;
+        const output = document.getElementById('output').value;
 
-        const prompt = `אתה פועל כעת בתור ${role}.
-המשימה שלך היא ליצור ${type}.
+        if(!desc) return alert("בבקשה תאר מה אתה רוצה לבנות");
 
-**תיאור הפרויקט:**
-${desc}
+        const prompt = `Act as an expert ${role}. 
+Your goal is to help me build: ${desc}.
 
-**דגשים טכניים וכלים:**
-- השתמש בטכנולוגיות הבאות: ${tools}.
-- הממשק חייב להיות בעברית מלאה (RTL).
-- סגנון התוצאה: ${detail}.
-- הקוד צריך להיות מותאם ל-PWA ולעבודה חלקה במובייל.
+Please follow these strict guidelines:
+1. Tech Stack: Use ${stack}.
+2. Tone of voice: ${tone}.
+3. Output format: ${output}.
+4. RTL Support: If generating UI, ensure full Hebrew RTL support and modern CSS.
+5. Best Practices: Write clean, modular, and well-documented code/steps.
 
-**הוראות נוספות:**
-אנא וודא שהקוד נקי, מאובטח וכולל הערות בעברית להסבר הלוגיקה. אם יש חלקים שדורשים הגדרות חיצוניות, ציין זאת בבירור.`;
+Structure your response as follows:
+- Objective overview.
+- Technical implementation.
+- Safety checks & Error handling.
 
-        document.getElementById('final-prompt').innerText = prompt;
-        document.getElementById('result-container').style.display = 'block';
+Start by saying 'I understand the mission. Here is the professional plan:'`;
+
+        document.getElementById('finalPrompt').innerText = prompt;
+        document.getElementById('resultArea').style.display = 'block';
+        
+        saveToHistory(desc.substring(0, 30) + '...');
+    }
+
+    function saveToHistory(text) {
+        let history = JSON.parse(localStorage.getItem('prompt_history') || '[]');
+        history.unshift(text);
+        if(history.length > 5) history.pop();
+        localStorage.setItem('prompt_history', JSON.stringify(history));
+        updateHistoryUI();
+    }
+
+    function updateHistoryUI() {
+        const list = document.getElementById('historyList');
+        const history = JSON.parse(localStorage.getItem('prompt_history') || '[]');
+        list.innerHTML = history.map(item => `<div class="history-item">${item}</div>`).join('');
     }
 
     function copyToClipboard() {
-        const text = document.getElementById('final-prompt').innerText;
+        const text = document.getElementById('finalPrompt').innerText;
         navigator.clipboard.writeText(text).then(() => {
-            alert("הפרומפט הועתק! עכשיו פשוט הדבק אותו ב-Claude, Lovable או Gemini.");
+            document.getElementById('copyBadge').style.display = 'block';
+            setTimeout(() => document.getElementById('copyBadge').style.display = 'none', 2000);
         });
     }
+
+    // Initialize UI
+    updateHistoryUI();
 </script>
 
 </body>
 </html>
+      
