@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>AI Prompt Master - מחולל בקשות</title>
+    <style>
+        body { font-family: 'Segoe UI', system-ui; background: #0f172a; color: #f8fafc; padding: 20px; line-height: 1.6; }
+        .wrapper { max-width: 700px; margin: auto; background: #1e293b; padding: 30px; border-radius: 15px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); }
+        h1 { text-align: center; color: #38bdf8; margin-bottom: 30px; }
+        
+        label { display: block; margin-top: 15px; font-weight: bold; color: #94a3b8; }
+        select, textarea, input { width: 100%; padding: 12px; margin-top: 5px; background: #334155; border: 1px solid #475569; color: white; border-radius: 8px; box-sizing: border-box; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; }
+        
+        .btn-generate { background: #38bdf8; color: #0f172a; font-weight: bold; margin-top: 25px; border: none; padding: 15px; cursor: pointer; transition: 0.3s; font-size: 1.1rem; }
+        .btn-generate:hover { background: #7dd3fc; transform: translateY(-2px); }
+
+        #result-container { margin-top: 30px; padding: 20px; background: #0f172a; border-radius: 10px; border: 1px solid #38bdf8; display: none; }
+        #final-prompt { white-space: pre-wrap; font-size: 0.95rem; color: #cbd5e1; }
+        .copy-btn { background: #22c55e; margin-top: 15px; border: none; padding: 10px; color: white; border-radius: 5px; cursor: pointer; width: 100%; }
+    </style>
+</head>
+<body>
+
+<div class="wrapper">
+    <h1>🚀 AI Prompt Master</h1>
+    
+    <label>1. מה התפקיד של ה-AI?</label>
+    <select id="role">
+        <option value="מתכנת Full Stack בכיר">מתכנת בכיר</option>
+        <option value="מומחה חווית משתמש (UX/UI)">מעצב ממשקים</option>
+        <option value="מנתח מערכות מידע">מנתח מערכות</option>
+        <option value="כותב תוכן שיווקי">קופירייטר</option>
+    </select>
+
+    <div class="grid">
+        <div>
+            <label>2. מה בונים?</label>
+            <select id="outputType">
+                <option value="אפליקציית PWA">אפליקציית PWA</option>
+                <option value="דף נחיתה">דף נחיתה</option>
+                <option value="פונקציה ספציפית">פונקציה/קוד בלבד</option>
+                <option value="מסמך אפיון">מסמך אפיון</option>
+            </select>
+        </div>
+        <div>
+            <label>3. רמת פירוט</label>
+            <select id="detailLevel">
+                <option value="שלב אחר שלב עם הסברים">מפורט (Step-by-Step)</option>
+                <option value="קוד נקי ללא הסברים מיותרים">קוד נקי בלבד</option>
+                <option value="כולל טיפול בשגיאות ומקרי קצה">מקצועי (כולל שגיאות)</option>
+            </select>
+        </div>
+    </div>
+
+    <label>4. תאר את הרעיון שלך (במילים פשוטות):</label>
+    <textarea id="description" rows="4" placeholder="למשל: אני רוצה אפליקציה שתעזור לי לנהל..."></textarea>
+
+    <label>5. כלים וטכנולוגיות שחשוב לכלול:</label>
+    <input type="text" id="tools" placeholder="למשל: HTML/JS, Firebase, PDF Lib, WhatsApp link">
+
+    <button class="btn-generate" onclick="buildPrompt()">צור בקשה מנצחת ✨</button>
+
+    <div id="result-container">
+        <label>הבקשה המוכנה שלך:</label>
+        <div id="final-prompt"></div>
+        <button class="copy-btn" onclick="copyToClipboard()">העתק ושלח ל-AI 📋</button>
+    </div>
+</div>
+
+<script>
+    function buildPrompt() {
+        const role = document.getElementById('role').value;
+        const type = document.getElementById('outputType').value;
+        const detail = document.getElementById('detailLevel').value;
+        const desc = document.getElementById('description').value;
+        const tools = document.getElementById('tools').value;
+
+        const prompt = `אתה פועל כעת בתור ${role}.
+המשימה שלך היא ליצור ${type}.
+
+**תיאור הפרויקט:**
+${desc}
+
+**דגשים טכניים וכלים:**
+- השתמש בטכנולוגיות הבאות: ${tools}.
+- הממשק חייב להיות בעברית מלאה (RTL).
+- סגנון התוצאה: ${detail}.
+- הקוד צריך להיות מותאם ל-PWA ולעבודה חלקה במובייל.
+
+**הוראות נוספות:**
+אנא וודא שהקוד נקי, מאובטח וכולל הערות בעברית להסבר הלוגיקה. אם יש חלקים שדורשים הגדרות חיצוניות, ציין זאת בבירור.`;
+
+        document.getElementById('final-prompt').innerText = prompt;
+        document.getElementById('result-container').style.display = 'block';
+    }
+
+    function copyToClipboard() {
+        const text = document.getElementById('final-prompt').innerText;
+        navigator.clipboard.writeText(text).then(() => {
+            alert("הפרומפט הועתק! עכשיו פשוט הדבק אותו ב-Claude, Lovable או Gemini.");
+        });
+    }
+</script>
+
+</body>
+</html>
