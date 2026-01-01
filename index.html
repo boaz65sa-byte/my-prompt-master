@@ -3,32 +3,26 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BS - App Factory & Code Library</title>
+    <title>BS - App Factory & Library</title>
     <style>
-        :root { --primary: #38bdf8; --secondary: #818cf8; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --success: #22c55e; }
+        :root { --primary: #38bdf8; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
         body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
-        .container { max-width: 1200px; margin: auto; }
+        .container { max-width: 1000px; margin: auto; }
         
+        /* Header */
         .header { text-align: center; margin-bottom: 20px; }
-        .bs-logo-main { background: var(--primary); color: var(--bg); width: 50px; height: 50px; display: flex; align-items: center; justify-content: center; font-weight: 900; border-radius: 12px; margin: 0 auto 10px; font-size: 1.2rem; }
+        .logo { background: var(--primary); color: var(--bg); width: 45px; height: 45px; display: inline-flex; align-items: center; justify-content: center; font-weight: bold; border-radius: 10px; margin-bottom: 10px; }
 
-        /* Tabs */
-        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #334155; padding-bottom: 10px; }
-        .tab { cursor: pointer; padding: 12px 24px; border-radius: 10px; font-weight: bold; background: #334155; transition: 0.3s; color: #94a3b8; }
-        .tab.active { background: var(--primary); color: var(--bg); }
+        /* Navigation Tabs */
+        .nav-tabs { display: flex; gap: 10px; margin-bottom: 20px; background: #334155; padding: 10px; border-radius: 12px; }
+        .nav-btn { flex: 1; padding: 12px; border: none; border-radius: 8px; cursor: pointer; background: transparent; color: #94a3b8; font-weight: bold; transition: 0.3s; }
+        .nav-btn.active { background: var(--primary); color: var(--bg); }
 
-        .panel { display: none; animation: fadeIn 0.3s ease; }
-        .panel.active { display: block; }
+        /* Panels */
+        .content-panel { display: none; animation: fadeIn 0.3s ease; }
+        .content-panel.active { display: block; }
 
         .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
+        @media (max-width: 800px) { .grid { grid-template-columns: 1fr; } }
 
-        .card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 30px rgba(0,0,0,0.3); }
-        h3 { color: var(--primary); margin-top: 0; border-bottom: 1px solid #334155; padding-bottom: 10px; }
-        
-        label { display: block; margin-top: 15px; font-weight: bold; color: #94a3b8; font-size: 0.85rem; }
-        input, textarea, select { width: 100%; padding: 12px; margin-top: 5px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 10px; box-sizing: border-box; }
-        
-        .btn { background: var(--primary); color: #0f172a; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: 900; margin-top: 15px; transition: 0.3s; }
-        .btn:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.3); }
-        .btn-save {
+        .card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,2
