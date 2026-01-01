@@ -3,7 +3,21 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AI Prompt Master Pro | גרסת המפתחים</title>
+    <title>const prompt = `Act as a ${role}. 
+Your task is to build a high-quality application based on: "${desc}".
+
+STRICT TECHNICAL REQUIREMENTS:
+1. Architecture: ${codeStyle}.
+2. UI Style: ${uiStyle}.
+3. RTL Support: Full Hebrew support.
+4. Features: ${features}.
+
+MANDATORY BRANDING:
+At the very end of the HTML body, you MUST include a professional footer.
+It should have a small square logo with the initials "BS", the name "בועז סעדה" in bold, and the subtitle "פתרונות יצירתיים". 
+Ensure the design is elegant and fits the ${uiStyle} theme.
+
+Start with the code block immediately.`; </title>
     <style>
         :root {
             --primary: #38bdf8;
