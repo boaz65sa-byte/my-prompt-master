@@ -3,83 +3,167 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>const prompt = `Act as a ${role}. 
-Your task is to build a high-quality application based on: "${desc}".
-
-STRICT TECHNICAL REQUIREMENTS:
-1. Architecture: ${codeStyle}.
-2. UI Style: ${uiStyle}.
-3. RTL Support: Full Hebrew support.
-4. Features: ${features}.
-
-MANDATORY BRANDING:
-At the very end of the HTML body, you MUST include a professional footer.
-It should have a small square logo with the initials "BS", the name "בועז סעדה" in bold, and the subtitle "פתרונות יצירתיים". 
-Ensure the design is elegant and fits the ${uiStyle} theme.
-
-Start with the code block immediately.`; </title>
+    <title>BS - App Factory & Prompt Master</title>
     <style>
-        :root {
-            --primary: #38bdf8;
-            --secondary: #818cf8;
-            --bg: #0f172a;
-            --card: rgba(30, 41, 59, 0.7);
-            --text: #f1f5f9;
-        }
+        :root { --primary: #38bdf8; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; --accent: #818cf8; }
+        body { font-family: 'Segoe UI', system-ui; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
+        .container { max-width: 1200px; margin: auto; }
+        
+        /* Header & Branding */
+        .header { text-align: center; padding-bottom: 30px; border-bottom: 2px solid var(--primary); margin-bottom: 30px; }
+        .bs-badge { background: var(--primary); color: var(--bg); padding: 5px 15px; border-radius: 20px; font-weight: bold; font-size: 0.8rem; }
 
-        body {
-            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
-            background: radial-gradient(circle at top left, #1e1b4b, #0f172a);
-            color: var(--text);
-            margin: 0;
-            padding: 20px;
-            min-height: 100vh;
-        }
+        .main-grid { display: grid; grid-template-columns: 1.2fr 1.8fr; gap: 20px; }
+        .card { background: var(--card); padding: 20px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.4); }
 
-        .container {
-            max-width: 1000px;
-            margin: auto;
-        }
+        /* Form Elements */
+        label { display: block; margin-top: 15px; color: var(--primary); font-weight: bold; }
+        input, textarea, select { width: 100%; padding: 12px; margin-top: 8px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; box-sizing: border-box; }
+        
+        .btn { background: var(--primary); color: var(--bg); border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; }
+        .btn-save { background: #22c55e; color: white; margin-top: 10px; }
 
-        .header {
-            text-align: center;
-            padding: 20px 0 40px;
-        }
+        /* Projects List */
+        .project-list { margin-top: 20px; }
+        .project-item { background: #0f172a; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-right: 4px solid var(--primary); cursor: pointer; transition: 0.2s; }
+        .project-item:hover { background: #334155; }
+        .project-item h4 { margin: 0; color: var(--primary); }
+        .project-item p { margin: 5px 0 0; font-size: 0.8rem; color: #94a3b8; }
 
-        .header h1 {
-            font-size: 2.5rem;
-            background: linear-gradient(to right, #38bdf8, #818cf8);
-            -webkit-background-clip: text;
-            -webkit-text-fill-color: transparent;
-            margin-bottom: 10px;
-        }
+        /* Result Area */
+        #resultContainer { display: none; margin-top: 20px; }
+        .setup-guide { background: #030712; padding: 15px; border-radius: 10px; border: 1px dashed var(--accent); margin-top: 15px; font-size: 0.9rem; }
+        
+        /* Footer */
+        .bs-footer { text-align: center; margin-top: 50px; padding: 20px; border-top: 1px solid #334155; opacity: 0.8; }
+    </style>
+</head>
+<body>
 
-        .grid-layout {
-            display: grid;
-            grid-template-columns: 1.5fr 1fr;
-            gap: 20px;
-        }
+<div class="container">
+    <div class="header">
+        <span class="bs-badge">BOAZ SAADA - CREATIVE SOLUTIONS</span>
+        <h1>מפעל האפליקציות והפרומפטים</h1>
+    </div>
 
-        .card {
-            background: var(--card);
-            backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.1);
-            padding: 25px;
-            border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-        }
+    <div class="main-grid">
+        <div class="card">
+            <h3>🔨 יצירת פרויקט חדש</h3>
+            <label>שם הפרויקט (לשמירה):</label>
+            <input type="text" id="projName" placeholder="למשל: דוחות ועד בית v3">
+            
+            <label>מה האפליקציה תכיל?</label>
+            <textarea id="projDesc" rows="5" placeholder="תאר את הלוגיקה והפיצ'רים..."></textarea>
+            
+            <label>סגנון קוד:</label>
+            <select id="projStyle">
+                <option value="Single-file PWA (HTML/CSS/JS)">PWA - קובץ אחד (מוכן ל-GitHub)</option>
+                <option value="Modular Code">קוד מודולרי</option>
+            </select>
 
-        label {
-            display: block;
-            margin-top: 15px;
-            color: var(--primary);
-            font-size: 0.9rem;
-            font-weight: bold;
-        }
+            <button class="btn" onclick="generateAndShow()">צור פרומפט מקצועי ✨</button>
+            <button class="btn btn-save" onclick="saveCurrentProject()">💾 שמור פרויקט למחסן</button>
+        </div>
 
-        select, textarea, input {
-            width: 100%;
-            padding: 12px;
-            margin-top: 8px;
-            background: rgba(15, 23, 42, 0.8);
-            border
+        <div class="card">
+            <h3>📂 מחסן הפרויקטים שלי</h3>
+            <div id="projectsWarehouse" class="project-list">
+                </div>
+
+            <div id="resultContainer">
+                <h3 style="color:var(--primary)">📋 הפרומפט שלך מוכן:</h3>
+                <textarea id="finalPrompt" rows="8" readonly style="background:#000; font-family:monospace;"></textarea>
+                <button class="btn" onclick="copyPrompt()">העתק ושגר ל-AI 🚀</button>
+                
+                <div class="setup-guide">
+                    <strong>📍 איך מתקינים?</strong><br>
+                    1. העתק את הפרומפט ל-Claude/Lovable.<br>
+                    2. קבל את הקוד מה-AI.<br>
+                    3. כנס ל-GitHub ל-Repository שלך.<br>
+                    4. ערוך את index.html, הדבק ושמור.<br>
+                    5. האפליקציה תתעדכן בקישור שלך תוך דקה.
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="bs-footer">
+        <div style="font-weight:900; font-size:1.5rem; color:var(--primary)">BS</div>
+        <p>בועז סעדה - פתרונות יצירתיים © 2026</p>
+    </footer>
+</div>
+
+<script>
+    // טעינת פרויקטים מהזיכרון
+    let myProjects = JSON.parse(localStorage.getItem('bs_projects') || '[]');
+
+    function updateWarehouseUI() {
+        const warehouse = document.getElementById('projectsWarehouse');
+        if (myProjects.length === 0) {
+            warehouse.innerHTML = '<p style="color:#64748b">אין פרויקטים שמורים עדיין...</p>';
+            return;
+        }
+        warehouse.innerHTML = myProjects.map((p, index) => `
+            <div class="project-item" onclick="loadProject(${index})">
+                <h4>${p.name}</h4>
+                <p>${p.desc.substring(0, 50)}...</p>
+                <small style="color:var(--accent)">💾 נשמר ב: ${p.date}</small>
+            </div>
+        `).join('');
+    }
+
+    function generateAndShow() {
+        const name = document.getElementById('projName').value;
+        const desc = document.getElementById('projDesc').value;
+        const style = document.getElementById('projStyle').value;
+
+        if (!name || !desc) return alert("מלא שם ופרויקט!");
+
+        const fullPrompt = `Act as a Senior Developer. Build a professional ${style}.
+Project Name: ${name}.
+Features: ${desc}.
+Include Hebrew RTL support. 
+At the end of the code, add a footer: "© 2026 בועז סעדה - פתרונות יצירתיים".
+Provide full code in one block.`;
+
+        document.getElementById('finalPrompt').value = fullPrompt;
+        document.getElementById('resultContainer').style.display = 'block';
+    }
+
+    function saveCurrentProject() {
+        const name = document.getElementById('projName').value;
+        const desc = document.getElementById('projDesc').value;
+        if (!name) return alert("תן שם לפרויקט כדי לשמור אותו!");
+
+        const newProj = {
+            name: name,
+            desc: desc,
+            date: new Date().toLocaleDateString('he-IL')
+        };
+
+        myProjects.unshift(newProj);
+        localStorage.setItem('bs_projects', JSON.stringify(myProjects));
+        updateWarehouseUI();
+        alert("הפרויקט נשמר בהצלחה במחסן!");
+    }
+
+    function loadProject(index) {
+        const p = myProjects[index];
+        document.getElementById('projName').value = p.name;
+        document.getElementById('projDesc').value = p.desc;
+        generateAndShow();
+    }
+
+    function copyPrompt() {
+        const copyText = document.getElementById('finalPrompt');
+        copyText.select();
+        document.execCommand("copy");
+        alert("הפרומפט הועתק! עכשיו תדביק אותו ב-AI.");
+    }
+
+    // אתחול
+    updateWarehouseUI();
+</script>
+
+</body>
+</html>
