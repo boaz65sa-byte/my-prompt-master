@@ -3,120 +3,226 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BS - App Factory</title>
+    <title>BS - AI Prompt Factory Pro</title>
     <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            background-color: #0f172a; 
-            color: #f1f5f9; 
-            margin: 0; 
-            padding: 20px; 
-            text-align: center;
+        :root {
+            --primary: #38bdf8;
+            --secondary: #818cf8;
+            --bg: #0f172a;
+            --card: #1e293b;
+            --text: #f1f5f9;
         }
-        .container { max-width: 800px; margin: auto; background: #1e293b; padding: 25px; border-radius: 15px; box-shadow: 0 10px 25px rgba(0,0,0,0.5); border: 1px solid #38bdf8; }
-        h1 { color: #38bdf8; margin-bottom: 5px; }
-        .bs-badge { font-size: 0.8rem; color: #818cf8; font-weight: bold; border: 1px solid #818cf8; padding: 3-x 10px; border-radius: 20px; }
+        body { 
+            font-family: system-ui, -apple-system, sans-serif; 
+            background: var(--bg); 
+            color: var(--text); 
+            margin: 0; 
+            padding: 20px;
+        }
+        .container { max-width: 1100px; margin: auto; }
+        .header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 20px; margin-bottom: 30px; }
         
-        .form-group { text-align: right; margin-top: 20px; }
-        label { display: block; margin-bottom: 5px; font-weight: bold; color: #38bdf8; }
-        input, textarea { width: 100%; padding: 12px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; box-sizing: border-box; }
-        
-        .btn { background: #38bdf8; color: #0f172a; border: none; padding: 15px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; font-size: 1rem; }
-        .btn:hover { background: #7dd3fc; }
-        .btn-save { background: #22c55e; color: white; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 850px) { .grid { grid-template-columns: 1fr; } }
 
-        .warehouse { margin-top: 30px; text-align: right; border-top: 1px solid #334155; padding-top: 20px; }
-        .project-item { background: #0f172a; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-right: 4px solid #38bdf8; cursor: pointer; }
+        .card { 
+            background: var(--card); 
+            padding: 20px; 
+            border-radius: 15px; 
+            box-shadow: 0 10px 20px rgba(0,0,0,0.3); 
+            border: 1px solid rgba(255,255,255,0.05);
+        }
+
+        h3 { color: var(--primary); margin-top: 0; }
+        label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; color: #94a3b8; }
         
-        #result { display: none; margin-top: 20px; background: #000; padding: 15px; border-radius: 10px; text-align: left; direction: ltr; }
-        
-        .footer { margin-top: 40px; border-top: 1px solid #334155; padding-top: 20px; }
-        .logo-box { background: #38bdf8; color: #0f172a; width: 40px; height: 40px; line-height: 40px; margin: auto; font-weight: bold; border-radius: 8px; }
+        input, textarea, select { 
+            width: 100%; padding: 12px; margin-top: 5px; 
+            background: #0f172a; border: 1px solid #334155; 
+            color: white; border-radius: 8px; box-sizing: border-box;
+        }
+
+        .btn { 
+            background: var(--primary); color: #0f172a; border: none; 
+            padding: 15px; border-radius: 8px; cursor: pointer; 
+            width: 100%; font-weight: bold; margin-top: 15px; transition: 0.3s;
+        }
+        .btn:hover { opacity: 0.9; transform: translateY(-2px); }
+        .btn-save { background: #22c55e; color: white; margin-top: 10px; }
+
+        .project-item { 
+            background: #0f172a; padding: 12px; border-radius: 8px; 
+            margin-bottom: 10px; border-right: 4px solid var(--primary); 
+            cursor: pointer; transition: 0.2s;
+        }
+        .project-item:hover { background: #334155; }
+
+        #result-box { 
+            display: none; margin-top: 20px; background: #000; 
+            padding: 15px; border-radius: 10px; border: 1px solid var(--primary);
+        }
+        #prompt-text { 
+            white-space: pre-wrap; font-family: monospace; font-size: 0.85rem; color: #cbd5e1; 
+            max-height: 300px; overflow-y: auto; text-align: left; direction: ltr;
+        }
+
+        .footer { 
+            text-align: center; margin-top: 50px; padding: 20px; 
+            border-top: 1px solid #334155; 
+        }
+        .bs-logo { 
+            background: var(--primary); color: #0f172a; width: 50px; height: 50px; 
+            display: flex; align-items: center; justify-content: center; 
+            font-weight: 900; border-radius: 12px; margin: 0 auto 10px; 
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <span class="bs-badge">BOAZ SAADA</span>
-    <h1>מפעל האפליקציות</h1>
-    <p>צור, שמור ונהל פרומפטים מקצועיים</p>
-
-    <div class="form-group">
-        <label>שם הפרויקט:</label>
-        <input type="text" id="pName" placeholder="למשל: אפליקציית ועד בית">
-        
-        <label>תיאור ופיצ'רים:</label>
-        <textarea id="pDesc" rows="4" placeholder="מה האפליקציה תעשה?"></textarea>
-        
-        <button class="btn" onclick="generate()">צור פרומפט ל-AI ✨</button>
-        <button class="btn btn-save" onclick="save()">שמור פרויקט למחסן 💾</button>
+    <div class="header">
+        <h1>BS - AI Prompt Factory Pro</h1>
+        <p>גרסת המפתחים המקצועית - בועז סעדה</p>
     </div>
 
-    <div id="result">
-        <p style="color: #22c55e; margin: 0; font-family: sans-serif;">Generated Prompt:</p>
-        <pre id="promptOut" style="white-space: pre-wrap; color: #ccc; font-size: 0.9rem;"></pre>
-        <button onclick="copy()" style="padding: 5px 10px; cursor: pointer;">העתק קוד 📋</button>
-    </div>
+    <div class="grid">
+        <div class="card">
+            <h3>🛠️ הגדרות בקשה</h3>
+            
+            <label>שם הפרויקט (לשמירה):</label>
+            <input type="text" id="pName" placeholder="למשל: אפליקציית דוחות">
 
-    <div class="warehouse">
-        <h3>📂 מחסן פרויקטים:</h3>
-        <div id="storage"></div>
+            <label>🤖 תפקיד ה-AI:</label>
+            <select id="pRole">
+                <option value="Senior Software Architect">ארכיטקט תוכנה בכיר</option>
+                <option value="Full-Stack Developer">מתכנת Full-Stack</option>
+                <option value="Product Manager">מנהל מוצר (אפיון)</option>
+                <option value="UX/UI Expert">מומחה חווית משתמש</option>
+            </select>
+
+            <label>💻 סגנון קוד:</label>
+            <select id="pStyle">
+                <option value="Single-file PWA (HTML/CSS/JS)">קובץ אחד אחוד (PWA)</option>
+                <option value="Modular Code with comments">קוד מודולרי מסודר</option>
+                <option value="Fast MVP Script">סקריפט מהיר (MVP)</option>
+            </select>
+
+            <label>📝 מה לבנות? (תיאור חופשי):</label>
+            <textarea id="pDesc" rows="4" placeholder="תאר את הלוגיקה והמטרה..."></textarea>
+
+            <label>🛠️ כלים נדרשים:</label>
+            <input type="text" id="pTools" placeholder="למשל: PDF, WhatsApp, LocalStorage, Charts">
+
+            <button class="btn" onclick="generate()">צור פרומפט עוצמתי ✨</button>
+            <button class="btn btn-save" onclick="saveProject()">שמור למחסן 💾</button>
+        </div>
+
+        <div class="card">
+            <h3>📂 מחסן הפרויקטים שלי</h3>
+            <div id="warehouse" style="max-height: 250px; overflow-y: auto; margin-bottom: 20px;">
+                </div>
+
+            <div id="result-box">
+                <h4 style="color:var(--primary); margin:0 0 10px;">הפרומפט המקצועי שלך:</h4>
+                <div id="prompt-text"></div>
+                <button class="btn" onclick="copy()" style="background:var(--secondary); color:white;">העתק ושגר ל-AI 📋</button>
+            </div>
+            
+            <div style="margin-top:20px; font-size:0.8rem; color:#64748b; background: rgba(0,0,0,0.2); padding:10px; border-radius:8px;">
+                <strong>📍 הוראות התקנה:</strong><br>
+                העתק את הפרומפט -> שלח ל-AI -> קבל קוד -> הדבק ב-index.html ב-GitHub שלך.
+            </div>
+        </div>
     </div>
 
     <footer class="footer">
-        <div class="logo-box">BS</div>
-        <p><strong>בועז סעדה - פתרונות יצירתיים</strong></p>
-        <p style="font-size: 0.7rem; color: #64748b;">© 2026 כל הזכויות שמורות</p>
+        <div class="bs-logo">BS</div>
+        <h3 style="margin:0;">בועז סעדה</h3>
+        <p style="margin:5px 0;">פתרונות יצירתיים</p>
+        <p style="font-size:0.7rem; color:#475569;">© 2026 כל הזכויות שמורות</p>
     </footer>
 </div>
 
 <script>
-    let db = JSON.parse(localStorage.getItem('bs_vault') || '[]');
+    // ניהול זיכרון
+    let projects = JSON.parse(localStorage.getItem('bs_pro_vault') || '[]');
 
-    function render() {
-        const out = document.getElementById('storage');
-        if (db.length === 0) { out.innerHTML = '<p>המחסן ריק...</p>'; return; }
-        out.innerHTML = db.map((p, i) => `
+    function renderWarehouse() {
+        const list = document.getElementById('warehouse');
+        if (projects.length === 0) {
+            list.innerHTML = '<p style="color:#64748b; text-align:center;">המחסן ריק. צור פרויקט ראשון!</p>';
+            return;
+        }
+        list.innerHTML = projects.map((p, i) => `
             <div class="project-item" onclick="load(${i})">
                 <strong>${p.name}</strong><br>
-                <small>${p.desc.substring(0, 40)}...</small>
+                <small style="font-size:0.7rem; color:#94a3b8;">${p.date} | ${p.role}</small>
             </div>
         `).join('');
     }
 
     function generate() {
-        const n = document.getElementById('pName').value;
-        const d = document.getElementById('pDesc').value;
-        if(!n || !d) return alert("מלא שם ותיאור!");
-        
-        const txt = `Act as a Senior Developer. Build a PWA: ${n}. Features: ${d}. Include Hebrew RTL and footer: '© 2026 בועז סעדה - פתרונות יצירתיים'. Provide full code in one block.`;
-        document.getElementById('promptOut').innerText = txt;
-        document.getElementById('result').style.display = 'block';
+        const name = document.getElementById('pName').value;
+        const role = document.getElementById('pRole').value;
+        const style = document.getElementById('pStyle').value;
+        const desc = document.getElementById('pDesc').value;
+        const tools = document.getElementById('pTools').value;
+
+        if (!name || !desc) return alert("בבקשה מלא שם ותיאור פרויקט");
+
+        const prompt = `Act as an expert ${role}.
+Your task is to build a high-quality ${style}.
+Project Name: ${name}
+Main Logic: ${desc}
+Required Tools: ${tools}
+
+TECHNICAL RULES:
+- Full Hebrew RTL support for the UI.
+- Use modern CSS and clean JavaScript.
+- Mandatory Footer: At the end of the HTML, add a professional footer: "© 2026 בועז סעדה - פתרונות יצירתיים".
+- Output: Provide the COMPLETE code in one block.
+
+Start with: "I understand the project requirements. Here is the full production-ready code:"`;
+
+        document.getElementById('prompt-text').innerText = prompt;
+        document.getElementById('result-box').style.display = 'block';
     }
 
-    function save() {
-        const n = document.getElementById('pName').value;
-        const d = document.getElementById('pDesc').value;
-        if(!n) return;
-        db.unshift({name: n, desc: d});
-        localStorage.setItem('bs_vault', JSON.stringify(db));
-        render();
+    function saveProject() {
+        const name = document.getElementById('pName').value;
+        const desc = document.getElementById('pDesc').value;
+        const role = document.getElementById('pRole').value;
+        if (!name) return alert("תן שם לפרויקט!");
+
+        const p = {
+            name: name,
+            desc: desc,
+            role: role,
+            date: new Date().toLocaleDateString('he-IL')
+        };
+
+        projects.unshift(p);
+        localStorage.setItem('bs_pro_vault', JSON.stringify(projects));
+        renderWarehouse();
         alert("נשמר במחסן!");
     }
 
     function load(i) {
-        document.getElementById('pName').value = db[i].name;
-        document.getElementById('pDesc').value = db[i].desc;
+        const p = projects[i];
+        document.getElementById('pName').value = p.name;
+        document.getElementById('pDesc').value = p.desc;
+        document.getElementById('pRole').value = p.role;
         generate();
     }
 
     function copy() {
-        const t = document.getElementById('promptOut').innerText;
-        navigator.clipboard.writeText(t);
-        alert("הועתק!");
+        const text = document.getElementById('prompt-text').innerText;
+        navigator.clipboard.writeText(text);
+        alert("הפרומפט הועתק! עכשיו שלח אותו ל-AI.");
     }
 
-    render();
+    // אתחול דף
+    renderWarehouse();
 </script>
 
 </body>
