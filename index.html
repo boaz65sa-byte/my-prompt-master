@@ -3,123 +3,92 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BS - Ultimate AI Factory 2026</title>
+    <title>BS - App Factory & Code Library</title>
     <style>
         :root { --primary: #38bdf8; --secondary: #818cf8; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
-        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; line-height: 1.5; }
+        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 20px; }
         .container { max-width: 1200px; margin: auto; }
-        .header { text-align: center; border-bottom: 2px solid var(--primary); padding: 20px 0; margin-bottom: 30px; }
         
-        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 25px; }
+        /* Tabs */
+        .tabs { display: flex; gap: 10px; margin-bottom: 20px; border-bottom: 2px solid #334155; padding-bottom: 10px; }
+        .tab { cursor: pointer; padding: 10px 20px; border-radius: 8px; font-weight: bold; background: #334155; transition: 0.3s; }
+        .tab.active { background: var(--primary); color: var(--bg); }
+
+        .panel { display: none; animation: fadeIn 0.3s ease; }
+        .panel.active { display: block; }
+
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
         @media (max-width: 900px) { .grid { grid-template-columns: 1fr; } }
 
-        .card { background: var(--card); padding: 25px; border-radius: 20px; border: 1px solid rgba(255,255,255,0.1); box-shadow: 0 15px 35px rgba(0,0,0,0.5); }
-        h3 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; }
+        .card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); }
+        input, textarea, select { width: 100%; padding: 12px; margin-top: 8px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 10px; box-sizing: border-box; }
         
-        label { display: block; margin-top: 15px; font-weight: bold; color: #94a3b8; font-size: 0.85rem; }
-        input[type="text"], textarea, select { width: 100%; padding: 12px; margin-top: 5px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 10px; box-sizing: border-box; }
-        
-        /* Tool Selector Grid */
-        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px; background: rgba(0,0,0,0.2); padding: 15px; border-radius: 12px; }
-        .tool-item { display: flex; align-items: center; gap: 8px; font-size: 0.9rem; cursor: pointer; }
-        .tool-item input { width: 18px; height: 18px; cursor: pointer; }
-
-        .btn { background: var(--primary); color: #0f172a; border: none; padding: 16px; border-radius: 12px; cursor: pointer; width: 100%; font-weight: 900; margin-top: 20px; transition: 0.3s; font-size: 1.1rem; }
-        .btn:hover { transform: translateY(-3px); box-shadow: 0 5px 15px rgba(56, 189, 248, 0.4); }
+        .btn { background: var(--primary); color: #0f172a; border: none; padding: 15px; border-radius: 10px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 15px; }
         .btn-save { background: #22c55e; color: white; }
 
-        .project-item { background: #0f172a; padding: 15px; border-radius: 12px; margin-bottom: 12px; border-right: 5px solid var(--primary); cursor: pointer; border-left: 1px solid transparent; }
-        .project-item:hover { border-left: 1px solid var(--primary); background: #1e293b; }
+        .list-item { background: #0f172a; padding: 15px; border-radius: 10px; margin-bottom: 10px; border-right: 4px solid var(--primary); cursor: pointer; position: relative; }
+        .list-item:hover { background: #2d3748; }
+        .delete-btn { position: absolute; left: 10px; top: 10px; color: #ef4444; cursor: pointer; font-size: 0.8rem; }
 
-        #result-box { display: none; margin-top: 20px; background: #000; padding: 20px; border-radius: 15px; border: 1px solid var(--primary); animation: slideUp 0.4s ease; }
-        #prompt-text { white-space: pre-wrap; font-family: 'Consolas', monospace; font-size: 0.9rem; color: #38bdf8; max-height: 400px; overflow-y: auto; text-align: left; direction: ltr; }
+        #code-display { background: #000; padding: 15px; border-radius: 10px; border: 1px solid var(--primary); display: none; margin-top: 10px; }
+        pre { white-space: pre-wrap; word-wrap: break-word; font-family: monospace; font-size: 0.85rem; color: #38bdf8; }
 
-        .footer { text-align: center; margin-top: 60px; padding: 30px; border-top: 1px solid #334155; }
-        .bs-logo { background: var(--primary); color: #0f172a; width: 60px; height: 60px; display: flex; align-items: center; justify-content: center; font-weight: 900; border-radius: 15px; margin: 0 auto 10px; font-size: 1.5rem; }
-
-        @keyframes slideUp { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <div class="header">
-        <h1>BS AI FACTORY PRO 🚀</h1>
-        <p>מערכת הנדסת פרומפטים מתקדמת | בועז סעדה פתרונות יצירתיים</p>
+    <div class="tabs">
+        <div class="tab active" onclick="showPanel('builder')">🔨 בונה הפרומפטים</div>
+        <div class="tab" onclick="showPanel('library')">📚 ספריית קוד ורכיבים</div>
     </div>
 
-    <div class="grid">
-        <div class="card">
-            <h3>🏗️ אפיון פרויקט חכם</h3>
-            
-            <label>שם הפרויקט:</label>
-            <input type="text" id="pName" placeholder="למשל: אפליקציית ניהול משימות">
-
-            <div style="display: flex; gap: 10px;">
-                <div style="flex: 1;">
-                    <label>🤖 מומחיות AI:</label>
-                    <select id="pRole">
-                        <option value="Senior Full-Stack Architect">ארכיטקט תוכנה (הכל מהכל)</option>
-                        <option value="Creative UX/UI Designer">מעצב ממשק (דגש על יופי)</option>
-                        <option value="Logic & Security Specialist">מומחה לוגיקה ואבטחה</option>
-                    </select>
-                </div>
-                <div style="flex: 1;">
-                    <label>🧠 מצב חשיבה:</label>
-                    <select id="pMode">
-                        <option value="Production Ready (Stable)">יציב ומוכן לעבודה</option>
-                        <option value="Highly Creative & Innovative">חדשני ויצירתי</option>
-                        <option value="Minimalist & Performance">מינימליסטי ומהיר</option>
-                    </select>
-                </div>
+    <div id="builder" class="panel active">
+        <div class="grid">
+            <div class="card">
+                <h3>יצירת פרויקט חדש</h3>
+                <input type="text" id="pName" placeholder="שם הפרויקט">
+                <textarea id="pDesc" rows="4" placeholder="תיאור האפליקציה..."></textarea>
+                <input type="text" id="pLink" placeholder="קישור לגרסה חיה (GitHub Link)">
+                <button class="btn" onclick="generate()">צור פרומפט ✨</button>
+                <button class="btn btn-save" onclick="saveProject()">שמור פרויקט במחסן 💾</button>
             </div>
-
-            <label>💻 סגנון קוד וארכיטקטורה:</label>
-            <select id="pStyle">
-                <option value="Single-file HTML/CSS/JS (PWA Ready)">קובץ אחד (PWA) - מושלם ל-GitHub</option>
-                <option value="Modern React-style (without libraries)">מודרני (ונילה JS)</option>
-                <option value="Clean Python Script">סקריפט Python</option>
-            </select>
-
-            <label>📝 תיאור המשימה (מה האפליקציה תעשה?):</label>
-            <textarea id="pDesc" rows="4" placeholder="תאר את הפונקציונליות המרכזית..."></textarea>
-
-            <label>🛠️ בחירת כלים (סמן מה שצריך):</label>
-            <div class="tools-grid">
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="PDF Export (jspdf)"> יצירת PDF</label>
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="WhatsApp Integration"> חיבור לוואטסאפ</label>
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="Charts & Graphs (Chart.js)"> גרפים ונתונים</label>
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="Local Database (LocalStorage)"> שמירת נתונים</label>
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="Camera/Image Upload"> מצלמה/קבצים</label>
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="Search & Filter"> חיפוש וסינון</label>
-            </div>
-
-            <label>➕ כלים נוספים (בכתב):</label>
-            <input type="text" id="pExtraTools" placeholder="למשל: API של מזג אוויר, חתימה דיגיטלית...">
-
-            <button class="btn" onclick="generate()">צור פרומפט מנצח ✨</button>
-            <button class="btn btn-save" onclick="saveProject()">💾 שמור למחסן הפרויקטים</button>
-        </div>
-
-        <div class="card">
-            <h3>📂 המחסן של בועז</h3>
-            <div id="warehouse" style="max-height: 250px; overflow-y: auto; margin-bottom: 20px; padding-left: 5px;">
-                </div>
-
-            <div id="result-box">
-                <h4 style="color:var(--primary); margin-top:0;">📋 הפרומפט המקצועי מוכן:</h4>
-                <div id="prompt-text"></div>
-                <button class="btn" onclick="copy()" style="background:var(--secondary); color:white;">העתק ושלח ל-AI 🚀</button>
-            </div>
-            
-            <div style="margin-top:20px; font-size:0.85rem; color:#94a3b8; line-height:1.6;">
-                <strong>💡 איך עובדים נכון?</strong><br>
-                1. העתק את הפרומפט מהתיבה השחורה.<br>
-                2. הדבק ב-Claude 3.5 או Lovable.<br>
-                3. קבל את הקוד המלא והדבק ב-index.html ב-GitHub.
+            <div class="card">
+                <h3>📂 מחסן פרויקטים</h3>
+                <div id="project-list"></div>
+                <div id="code-display"><pre id="prompt-out"></pre></div>
             </div>
         </div>
     </div>
 
-    <footer class="footer">
-        <div class="bs
+    <div id="library" class="panel">
+        <div class="grid">
+            <div class="card">
+                <h3>שמירת רכיב קוד (Snippet)</h3>
+                <input type="text" id="libName" placeholder="שם הרכיב (למשל: חותמת בועז)">
+                <input type="text" id="libUsage" placeholder="איפה מדביקים? (למשל: בסוף ה-Body)">
+                <textarea id="libCode" rows="8" placeholder="הדבק כאן את הקוד..."></textarea>
+                <button class="btn btn-save" onclick="saveToLibrary()">שמור לספרייה 📚</button>
+            </div>
+            <div class="card">
+                <h3>📚 רכיבים שמורים</h3>
+                <div id="library-list"></div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let projects = JSON.parse(localStorage.getItem('bs_projects_v5') || '[]');
+    let library = JSON.parse(localStorage.getItem('bs_library_v5') || '[]');
+
+    function showPanel(id) {
+        document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.getElementById(id).classList.add('active');
+        event.target.classList.add('active');
+    }
+
+    function saveToLibrary() {
+        const name = document.getElementById('libName').value
