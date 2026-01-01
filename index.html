@@ -2,162 +2,187 @@
 <html lang="he" dir="rtl">
 <head>
     <meta charset="UTF-8">
-    <title>BS - AI Factory Professional</title>
+    <title>BS - AI Master Factory v6</title>
     <style>
-        :root { --primary: #0284c7; --bg: #f8fafc; --card: #ffffff; }
-        body { font-family: system-ui, sans-serif; background-color: var(--bg); color: #1e293b; margin: 0; padding: 20px; }
-        .container { max-width: 1000px; margin: auto; }
-        header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid var(--primary); padding-bottom: 10px; }
+        :root { --primary: #0ea5e9; --secondary: #6366f1; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
+        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; line-height: 1.4; }
+        .container { max-width: 1200px; margin: auto; }
         
-        .main-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-        @media (max-width: 800px) { .main-grid { grid-template-columns: 1fr; } }
+        header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px; }
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 950px) { .grid { grid-template-columns: 1fr; } }
+
+        .card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); box-shadow: 0 10px 25px rgba(0,0,0,0.3); }
+        h2 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
         
-        .box { background: var(--card); padding: 20px; border-radius: 12px; box-shadow: 0 4px 6px rgba(0,0,0,0.05); border: 1px solid #e2e8f0; text-align: right; }
-        h2 { color: var(--primary); font-size: 1.2rem; margin-top: 0; border-bottom: 1px solid #e2e8f0; padding-bottom: 10px; }
+        label { display: block; margin-top: 12px; font-weight: bold; font-size: 0.85rem; color: #94a3b8; }
+        input, textarea, select { width: 100%; padding: 10px; margin-top: 5px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; box-sizing: border-box; }
         
-        label { display: block; margin-top: 15px; font-weight: bold; font-size: 0.9rem; }
-        input, textarea, select { width: 100%; padding: 10px; margin: 5px 0; border: 1px solid #cbd5e1; border-radius: 6px; box-sizing: border-box; font-size: 1rem; }
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; }
+        .tool-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; }
+        .tool-item input { width: 16px; height: 16px; margin: 0; }
+
+        .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; transition: 0.2s; }
+        .btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+        .btn-green { background: #10b981; }
+
+        #prompt-display { display: none; background: #000; color: #38bdf8; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid var(--primary); }
+        pre { white-space: pre-wrap; font-family: monospace; font-size: 0.8rem; margin: 0; direction: ltr; text-align: left; }
+
+        .vault-item { background: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; border-right: 4px solid var(--primary); transition: 0.2s; }
+        .vault-item:hover { border-color: white; background: #1e293b; }
         
-        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; padding: 10px; background: #f1f5f9; border-radius: 8px; }
-        .tool-item { font-size: 0.85rem; display: flex; align-items: center; gap: 5px; }
-        
-        .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 6px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; }
-        .btn-green { background: #16a34a; }
-        
-        #result-area { display: none; margin-top: 20px; background: #0f172a; color: #38bdf8; padding: 15px; border-radius: 8px; direction: ltr; text-align: left; }
-        pre { white-space: pre-wrap; font-family: monospace; font-size: 0.85rem; }
-        
-        .list-item { background: #fff; padding: 10px; border-bottom: 1px solid #e2e8f0; cursor: pointer; }
-        .list-item:hover { background: #f1f5f9; }
+        /* Modal */
+        #modal { display: none; position: fixed; top:0; left:0; width:100%; height:100%; background: rgba(0,0,0,0.9); z-index: 1000; justify-content: center; align-items: center; padding: 20px; box-sizing: border-box; }
+        .modal-content { background: var(--card); width: 100%; max-width: 900px; height: 90%; border-radius: 15px; padding: 25px; display: flex; flex-direction: column; position: relative; }
     </style>
 </head>
 <body>
 
 <div class="container">
     <header>
-        <h1 style="margin:0; color:#0284c7;">BS AI Factory Pro</h1>
-        <p style="margin:5px 0;">בונה אפליקציות מוכנות ל-GitHub | בועז סעדה</p>
+        <h1 style="margin:0;">BS AI MASTER FACTORY 🚀</h1>
+        <p style="margin:5px 0; color:var(--primary);">בונה אפליקציות ומחסן קוד חכם | בועז סעדה</p>
     </header>
 
-    <div class="main-grid">
-        <div class="box">
-            <h2>🛠️ הגדרות אפליקציה</h2>
+    <div class="grid">
+        <div class="card">
+            <h2>🛠️ אפיון פרויקט ל-AI</h2>
+            
+            <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                <div>
+                    <label>🤖 תפקיד ה-AI:</label>
+                    <select id="pRole">
+                        <option value="Senior Full-Stack Architect">ארכיטקט תוכנה בכיר</option>
+                        <option value="UX/UI Design Specialist">מומחה חווית משתמש</option>
+                        <option value="Python & Logic Expert">מומחה לוגיקה ו-Data</option>
+                    </select>
+                </div>
+                <div>
+                    <label>🧠 מצב חשיבה:</label>
+                    <select id="pMode">
+                        <option value="Stable & Production Ready">יציב ומוכן לעבודה</option>
+                        <option value="Creative & Experimental">יצירתי וחדשני</option>
+                    </select>
+                </div>
+            </div>
+
             <label>שם הפרויקט:</label>
-            <input type="text" id="pName" placeholder="למשל: אפליקציית ניהול ועד בית">
-            
-            <label>מומחיות ה-AI:</label>
-            <select id="pRole">
-                <option value="Senior Full-Stack Developer">מתכנת בכיר (קוד נקי ויציב)</option>
-                <option value="Creative UX/UI Expert">מעצב ממשק (דגש על יופי)</option>
-            </select>
+            <input type="text" id="pName" placeholder="למשל: אפליקציית ניהול מחסן">
 
-            <label>מה האפליקציה תעשה?</label>
-            <textarea id="pDesc" rows="3" placeholder="תאר את הלוגיקה והמטרה..."></textarea>
-            
-            <label>כלים לשילוב (סמן מה שצריך):</label>
+            <label>מה האפליקציה תעשה? (אפיון חופשי):</label>
+            <textarea id="pDesc" rows="3" placeholder="תאר את הפונקציות המרכזיות..."></textarea>
+
+            <label>🛠️ כלים נדרשים (סמן):</label>
             <div class="tools-grid">
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="PDF Generation"> יצירת PDF</label>
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="WhatsApp Sharing"> שליחה לוואטסאפ</label>
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="LocalStorage Data Persistence"> שמירת נתונים</label>
-                <label class="tool-item"><input type="checkbox" class="tool-check" value="Charts/Analytics"> גרפים ונתונים</label>
+                <label class="tool-item"><input type="checkbox" class="tool-check" value="PDF Export"> יצירת PDF</label>
+                <label class="tool-item"><input type="checkbox" class="tool-check" value="WhatsApp Integration"> חיבור לוואטסאפ</label>
+                <label class="tool-item"><input type="checkbox" class="tool-check" value="LocalStorage DB"> שמירת נתונים</label>
+                <label class="tool-item"><input type="checkbox" class="tool-check" value="Camera Access"> גישה למצלמה</label>
             </div>
 
-            <button class="btn" onclick="buildPrompt()">צור פרומפט מנצח ל-AI ✨</button>
+            <button class="btn" onclick="generate()">צור פרומפט מקצועי ✨</button>
             
-            <div id="result-area">
-                <small style="color:white">העתק את זה ל-Claude/ChatGPT:</small>
+            <div id="prompt-display">
                 <pre id="prompt-txt"></pre>
-                <button onclick="copyText()" style="width:auto; padding:5px; margin-top:5px; cursor:pointer;">העתק 📋</button>
+                <button class="btn" onclick="copy('prompt-txt')" style="background:var(--secondary);">העתק פרומפט 📋</button>
             </div>
+
+            <hr style="margin:20px 0; opacity:0.1;">
             
-            <button class="btn btn-green" onclick="saveP()">שמור פרויקט למחסן 💾</button>
+            <h2>💾 שמירת תוצאה (הקוד שקיבלת)</h2>
+            <textarea id="pFinalCode" rows="3" placeholder="הדבק כאן את הקוד שה-AI יצר עבורך..."></textarea>
+            <button class="btn btn-green" onclick="save()">שמור פרויקט וקוד למחסן 📂</button>
         </div>
 
-        <div class="box">
-            <h2>📂 מחסן פרויקטים</h2>
-            <div id="pList" style="max-height: 200px; overflow-y: auto; margin-bottom: 20px;"></div>
-            
-            <h2>📚 ספריית קוד (Snippets)</h2>
-            <p style="font-size:0.75rem; color:#64748b">שמור כאן קודים קבועים (כמו החותמת שלך)</p>
-            <input type="text" id="libName" placeholder="שם הרכיב (חתימה)">
-            <textarea id="libCode" rows="2" placeholder="הדבק כאן את הקוד..."></textarea>
-            <button class="btn btn-green" onclick="saveL()">שמור לספרייה 📚</button>
-            <div id="lList" style="margin-top:10px;"></div>
+        <div class="card">
+            <h2>📂 מחסן הפרויקטים שלי</h2>
+            <div id="vault-list"></div>
+        </div>
+    </div>
+</div>
+
+<div id="modal" onclick="this.style.display='none'">
+    <div class="modal-content" onclick="event.stopPropagation()">
+        <h2 id="view-title"></h2>
+        <label>הקוד השמור:</label>
+        <textarea id="view-code" style="flex:1; background:#000; color:#38bdf8; font-family:monospace; margin-bottom:15px;" readonly></textarea>
+        <div style="display:flex; gap:10px;">
+            <button class="btn" onclick="copy('view-code')" style="flex:2;">העתק קוד 📋</button>
+            <button class="btn" onclick="document.getElementById('modal').style.display='none'" style="flex:1; background:#475569;">סגור</button>
         </div>
     </div>
 </div>
 
 <script>
-    let projects = JSON.parse(localStorage.getItem('bs_p_pro') || '[]');
-    let library = JSON.parse(localStorage.getItem('bs_l_pro') || '[]');
+    let vault = JSON.parse(localStorage.getItem('bs_vault_v6') || '[]');
 
-    function buildPrompt() {
+    function generate() {
         const name = document.getElementById('pName').value;
         const role = document.getElementById('pRole').value;
+        const mode = document.getElementById('pMode').value;
         const desc = document.getElementById('pDesc').value;
         let tools = [];
         document.querySelectorAll('.tool-check:checked').forEach(c => tools.push(c.value));
 
         if(!name || !desc) return alert("מלא שם ותיאור!");
 
-        const prompt = `Act as a ${role}. 
-Create a professional Single-file PWA (HTML/CSS/JS) for a project called "${name}".
-Main Goals: ${desc}
-Required Features: ${tools.join(', ')}
+        const prompt = `Act as a ${role}. Build a Single-file PWA in ${mode} mode.
+Project: ${name}
+Goal: ${desc}
+Required Tools: ${tools.join(', ')}
 
-TECHNICAL REQUIREMENTS:
-- Full Hebrew RTL support.
-- Modern, clean UI.
-- All code in ONE single block.
-- Mandatory Footer: "© 2026 בועז סעדה - פתרונות יצירתיים".
-
-Provide only the code. Ready?`;
+Guidelines:
+1. Full Hebrew RTL support.
+2. Production-quality code in ONE block.
+3. Footer: "© 2026 בועז סעדה - פתרונות יצירתיים".`;
 
         document.getElementById('prompt-txt').innerText = prompt;
-        document.getElementById('result-area').style.display = 'block';
+        document.getElementById('prompt-display').style.display = 'block';
     }
 
-    function saveP() {
+    function save() {
         const name = document.getElementById('pName').value;
-        if(!name) return;
-        projects.unshift({name, desc: document.getElementById('pDesc').value});
-        localStorage.setItem('bs_p_pro', JSON.stringify(projects));
-        renderP();
-        alert("נשמר!");
+        const code = document.getElementById('pFinalCode').value;
+        if(!name) return alert("תן שם לפרויקט!");
+
+        vault.unshift({
+            name, 
+            code, 
+            date: new Date().toLocaleDateString('he-IL'),
+            desc: document.getElementById('pDesc').value
+        });
+        
+        localStorage.setItem('bs_vault_v6', JSON.stringify(vault));
+        render();
+        alert("נשמר במחסן!");
     }
 
-    function renderP() {
-        document.getElementById('pList').innerHTML = projects.map(p => `<div class="list-item"><strong>${p.name}</strong></div>`).join('');
-    }
-
-    function saveL() {
-        const name = document.getElementById('libName').value;
-        const code = document.getElementById('libCode').value;
-        if(!name || !code) return;
-        library.unshift({name, code});
-        localStorage.setItem('bs_l_pro', JSON.stringify(library));
-        renderL();
-    }
-
-    function renderL() {
-        document.getElementById('lList').innerHTML = library.map((l, i) => `
-            <div class="list-item" onclick="copySnippet(${i})"><strong>${l.name}</strong> (לחץ להעתקה)</div>
+    function render() {
+        const list = document.getElementById('vault-list');
+        list.innerHTML = vault.map((p, i) => `
+            <div class="vault-item" onclick="openP(${i})">
+                <strong>${p.name}</strong>
+                <small style="color:#64748b; display:block;">${p.date} | ${p.desc.substring(0, 40)}...</small>
+            </div>
         `).join('');
     }
 
-    function copySnippet(i) {
-        navigator.clipboard.writeText(library[i].code);
-        alert("הקוד הועתק!");
+    function openP(i) {
+        const p = vault[i];
+        document.getElementById('view-title').innerText = p.name;
+        document.getElementById('view-code').value = p.code || "עדיין לא נשמר קוד לפרויקט זה.";
+        document.getElementById('modal').style.display = 'flex';
     }
 
-    function copyText() {
-        const txt = document.getElementById('prompt-txt').innerText;
-        navigator.clipboard.writeText(txt);
-        alert("הפרומפט הועתק!");
+    function copy(id) {
+        const el = document.getElementById(id);
+        const val = el.tagName === "TEXTAREA" ? el.value : el.innerText;
+        navigator.clipboard.writeText(val);
+        alert("הועתק!");
     }
 
-    renderP();
-    renderL();
+    render();
 </script>
 </body>
 </html>
