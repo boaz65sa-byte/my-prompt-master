@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <title>BS - AI Master Factory & Code Vault</title>
+    <style>
+        :root { --primary: #0ea5e9; --secondary: #6366f1; --bg: #0f172a; --card: #1e293b; --text: #f1f5f9; }
+        body { font-family: system-ui, sans-serif; background: var(--bg); color: var(--text); margin: 0; padding: 15px; }
+        .container { max-width: 1200px; margin: auto; }
+        header { text-align: center; border-bottom: 2px solid var(--primary); padding-bottom: 15px; margin-bottom: 20px; }
+        
+        .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+        @media (max-width: 950px) { .grid { grid-template-columns: 1fr; } }
+
+        .card { background: var(--card); padding: 20px; border-radius: 15px; border: 1px solid rgba(255,255,255,0.05); margin-bottom: 20px; }
+        h2 { color: var(--primary); margin-top: 0; display: flex; align-items: center; gap: 10px; font-size: 1.2rem; }
+        
+        label { display: block; margin-top: 10px; font-weight: bold; font-size: 0.85rem; color: #94a3b8; }
+        input, textarea, select { width: 100%; padding: 10px; margin-top: 5px; background: #0f172a; border: 1px solid #334155; color: white; border-radius: 8px; box-sizing: border-box; }
+        
+        .tools-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 10px 0; background: rgba(0,0,0,0.2); padding: 10px; border-radius: 10px; }
+        .tool-item { display: flex; align-items: center; gap: 6px; font-size: 0.8rem; }
+
+        .btn { background: var(--primary); color: white; border: none; padding: 12px; border-radius: 8px; cursor: pointer; width: 100%; font-weight: bold; margin-top: 10px; transition: 0.2s; }
+        .btn-green { background: #10b981; }
+        .btn-purple { background: var(--secondary); }
+
+        .output-box { display: none; background: #000; color: #38bdf8; padding: 15px; border-radius: 10px; margin-top: 15px; border: 1px solid var(--primary); position: relative; }
+        pre { white-space: pre-wrap; font-family: monospace; font-size: 0.8rem; margin: 0; direction: ltr; text-align: left; max-height: 200px; overflow-y: auto; }
+
+        .vault-container { max-height: 300px; overflow-y: auto; margin-top: 10px; }
+        .vault-item { background: #0f172a; border: 1px solid #334155; padding: 12px; border-radius: 10px; margin-bottom: 10px; cursor: pointer; border-right: 4px solid var(--primary); }
+        .vault-item:hover { background: #2d3748; }
+        
+        .tab-nav { display: flex; gap: 10px; margin-bottom: 20px; }
+        .tab-btn { flex: 1; padding: 10px; border: none; background: #334155; color: white; border-radius: 8px; cursor: pointer; font-weight: bold; }
+        .tab-btn.active { background: var(--primary); }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <header>
+        <div style="background:var(--primary); color:white; width:45px; height:45px; display:inline-flex; align-items:center; justify-content:center; border-radius:10px; font-weight:900; margin-bottom:10px;">BS</div>
+        <h1>BS AI Master Factory 2026</h1>
+    </header>
+
+    <div class="grid">
+        <div>
+            <div class="card">
+                <h2>🚀 מחולל אפליקציות (GitHub Ready)</h2>
+                <div style="display:grid; grid-template-columns: 1fr 1fr; gap:10px;">
+                    <div>
+                        <label>🤖 תפקיד ה-AI:</label>
+                        <select id="appRole">
+                            <option value="Senior Full-Stack Architect">ארכיטקט תוכנה</option>
+                            <option value="UX/UI Expert">מעצב ממשק</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label>🧠 מצב חשיבה:</label>
+                        <select id="appMode">
+                            <option value="Stable & Production Ready">יציב ומוכן</option>
+                            <option value="Creative & Innovative">יצירתי וחדשני</option>
+                        </select>
+                    </div>
+                </div>
+                <input type="text" id="appName" placeholder="שם האפליקציה">
+                <textarea id="appDesc" rows="2" placeholder="תאר מה האפליקציה תעשה..."></textarea>
+                <div class="tools-grid">
+                    <label class="tool-item"><input type="checkbox" class="tool-check" value="PDF"> PDF</label>
+                    <label class="tool-item"><input type="checkbox" class="tool-check" value="WhatsApp"> WhatsApp</label>
+                    <label class="tool-item"><input type="checkbox" class="tool-check" value="Storage"> Storage</label>
+                    <label class="tool-item"><input type="checkbox" class="tool-check" value="Charts"> גרפים</label>
+                </div>
+                <button class="btn" onclick="genApp()">צור פרומפט לאפליקציה ✨</button>
+                <div id="appOut" class="output-box"><pre id="appTxt"></pre><button class="btn btn-purple" onclick="copy('appTxt')">העתק פרומפט 📋</button></div>
+            </div>
+
+            <div class="card" style="border-color: var(--secondary);">
+                <h2 style="color:var(--secondary);">✂️ מחולל קטעי קוד (Snippets)</h2>
+                <input type="text" id="snipName" placeholder="שם הקוד (למשל: פונקציית חישוב מס)">
+                <textarea id="snipReq" rows="2" placeholder="איזה קוד אתה צריך שה-AI יכתוב עבורך?"></textarea>
+                <button class="btn btn-purple" onclick="genSnip()">צור פרומפט לקוד 📝</button>
+                <div id="snipOut" class="output-box" style="border-color:var(--secondary);"><pre id="snipTxt"></pre><button class="btn btn-purple" onclick="copy('snipTxt')">העתק פרומפט 📋</button></div>
+            </div>
+        </div>
+
+        <div>
+            <div class="card">
+                <h2>📂 מחסן הקודים שלי</h2>
+                <label>הדבק כאן את הקוד שקיבלת מה-AI (אפליקציה או קטע קוד):</label>
+                <textarea id="finalCode" rows="4" style="background:#000; color:#10b981; border-color:#10b981;" placeholder="הדבק קוד כאן..."></textarea>
+                <button class="btn btn-green" onclick="saveToVault()">שמור במחסן 💾</button>
+                
+                <div class="vault-container" id="vaultList">
+                    </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let vault = JSON.parse(localStorage.getItem('bs_vault_v7') || '[]');
+
+    function genApp() {
+        const name = document.getElementById('appName').value;
+        const role = document.getElementById('appRole').value;
+        const mode = document.getElementById('appMode').value;
+        const desc = document.getElementById('appDesc').value;
+        let tools = [];
+        document.querySelectorAll('.tool-check:checked').forEach(c => tools.push(c.value));
+        
+        const p = `Act as a ${role}. Build a Single-file PWA in ${mode} mode.\nProject: ${name}\nLogic: ${desc}\nTools: ${tools.join(', ')}\nOutput: ONE complete code block with Hebrew RTL and Footer: '© 2026 בועז סעדה - פתרונות יצירתיים'.`;
+        document.getElementById('appTxt').innerText = p;
+        document.getElementById('appOut').style.display = 'block';
+    }
+
+    function genSnip() {
+        const name = document.getElementById('snipName').value;
+        const req = document.getElementById('snipReq').value;
+        const p = `Write a reusable code snippet for: ${name}.\nRequirement: ${req}\nPlease provide ONLY the code, commented clearly.`;
+        document.getElementById('snipTxt').innerText = p;
+        document.getElementById('snipOut').style.display = 'block';
+    }
+
+    function saveToVault() {
+        const code = document.getElementById('finalCode').value;
+        const name = document.getElementById('appName').value || document.getElementById('snipName').value || "קוד ללא שם";
+        if(!code) return alert("הדבק קוד קודם!");
+        
+        vault.unshift({ name, code, date: new Date().toLocaleDateString('he-IL') });
+        localStorage.setItem('bs_vault_v7', JSON.stringify(vault));
+        renderVault();
+        document.getElementById('finalCode').value = "";
+        alert("נשמר במחסן!");
+    }
+
+    function renderVault() {
+        const list = document.getElementById('vaultList');
+        list.innerHTML = vault.map((v, i) => `
+            <div class="vault-item" onclick="copySaved(${i})">
+                <strong>${v.name}</strong>
+                <small style="color:#64748b;">${v.date} (לחץ להעתקת הקוד)</small>
+            </div>
+        `).join('');
+    }
+
+    function copySaved(i) {
+        navigator.clipboard.writeText(vault[i].code);
+        alert(`הקוד של "${vault[i].name}" הועתק לקליפבורד!`);
+    }
+
+    function copy(id) {
+        navigator.clipboard.writeText(document.getElementById(id).innerText);
+        alert("הפרומפט הועתק!");
+    }
+
+    renderVault();
+</script>
+</body>
+</html>
